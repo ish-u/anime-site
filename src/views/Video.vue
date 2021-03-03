@@ -1,13 +1,16 @@
 <template>
   <div>
     <div v-if="notLoading">
-      <br />
-      <h6 style="font-size: 10px">
-        try reloading if the video doesn't start... (・_・;)
-        <button @click="re">reload</button>
-      </h6>
-      <br />
-      <video :src="src" controls autoplay type="video/mp4"></video>
+      <div class="container p-5">
+        <h6 style="font-size: 10px">
+          try reloading if the video doesn't start... (・_・;)
+        </h6>
+        <vue-core-video-player
+          :autoplay="true"
+          type="video/mp4"
+          :src="src"
+        ></vue-core-video-player>
+      </div>
     </div>
     <div v-else>
       <div class="text-center container p-5">
@@ -41,13 +44,10 @@ export default {
         })
         .then((jsonData) => {
           this.src = jsonData[0].mp4;
-          console.log(this.src);
+          console.log(jsonData);
           this.notLoading = true;
         });
     },
-    re(){
-        this.getEpisode(this.id);
-    }
   },
   mounted: function () {
     this.getEpisode(this.id);
