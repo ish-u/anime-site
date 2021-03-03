@@ -1,32 +1,42 @@
 <template>
   <div>
-    <b-container class="p-5">
-      <SearchBar/>
-      <hr />
-      <b-row style="justify-content: center">
-        <b-col
-          v-on:click="
-            {
+    <div v-if="notLoading">
+      <b-container class="p-5">
+        <SearchBar />
+        <hr />
+        <b-row style="justify-content: center">
+          <b-col
+            v-on:click="
               {
-                getAnime(anime.id);
+                {
+                  getAnime(anime.id);
+                }
               }
-            }
-          "
-          class="box"
-          v-for="anime in result"
-          :key="anime.id"
-          cols="3"
-        >
-          <b>{{ anime.title }}</b>
-        </b-col>
-      </b-row>
-    </b-container>
+            "
+            class="box"
+            v-for="anime in result"
+            :key="anime.id"
+            cols="3"
+          >
+            <b>{{ anime.title }}</b>
+          </b-col>
+        </b-row>
+      </b-container>
+    </div>
+    <div v-else>
+      <div class="text-center container p-5">
+        <b-spinner
+          style="height: 50px; width: 50px"
+          label="Loading..."
+        ></b-spinner>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import SearchBar from "../components/SearchBar";
-const api = require("@dlwlrma00/animefreak2");
+// const api = require("@dlwlrma00/animefreak2");
 
 export default {
   props: {
@@ -38,17 +48,20 @@ export default {
   data() {
     return {
       result: [],
+      notLoading: false
     };
   },
   methods: {
     getSearch(query) {
-      api
-        .search(query)
-        .then((r) => {
-          this.result = r;
+      fetch(`${process.env.VUE_APP_ANIME_API}search/${query}`, {
+        method: "get",
+      })
+        .then((response) => {
+          return response.json();
         })
-        .catch((err) => {
-          console.log(err);
+        .then((jsonData) => {
+          this.result = jsonData;
+          this.notLoading = true;
         });
     },
     getAnime(id) {
@@ -59,10 +72,10 @@ export default {
     },
   },
   watch: {
-      $route(to){
-        this.query = to.params.query;
-        this.getSearch(this.query);
-      }
+    $route(to) {
+      this.query = to.params.query;
+      this.getSearch(this.query);
+    },
   },
   mounted: function () {
     this.getSearch(this.query);

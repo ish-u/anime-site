@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container p-5">
     <b-container
       class="p-5"
       style="height:inherit"

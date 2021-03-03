@@ -1,50 +1,58 @@
 <template>
   <div>
-    <b-container class="p-5">
-      <b-row>
-        <b-col cols="12">
-          <h1>{{ Anime.title }}</h1>
-          <h6>{{ Anime.firstAired }}</h6>
-        </b-col>
-      </b-row>
-      <hr />
-      <b-row style="padding: 10px; justify-content: center">
-        <b-col cols="4" style="padding: 25px; margin: 5px">
-          <img
-            :src="Anime.img"
-            alt="Title"
-            style="border: 5px black solid; padding: 5px; border-radius: 5px"
-          />
-        </b-col>
-        <b-col cols="6" style="padding: 25px; margin: 5px; text-align: left">
-          {{ Anime.synopsis }}
-        </b-col>
-      </b-row>
-      <hr />
-      <b-row style="justify-content: center">
-        <b-col
-          cols="1"
-          class="ep"
-          v-for="(episode, index) in Anime.episodes"
-          :key="episode.id"
-          v-on:click="
-            {
+    <div v-if="notLoading">
+      <b-container class="p-5">
+        <b-row>
+          <b-col cols="12">
+            <h1>{{ Anime.title }}</h1>
+            <h6>{{ Anime.firstAired }}</h6>
+          </b-col>
+        </b-row>
+        <hr />
+        <b-row style="padding: 10px; justify-content: center">
+          <b-col cols="4" style="padding: 25px; margin: 5px">
+            <img
+              :src="Anime.img"
+              alt="Title"
+              style="border: 5px black solid; padding: 5px; border-radius: 5px"
+            />
+          </b-col>
+          <b-col cols="6" style="padding: 25px; margin: 5px; text-align: left">
+            {{ Anime.synopsis }}
+          </b-col>
+        </b-row>
+        <hr />
+        <b-row style="justify-content: center">
+          <b-col
+            cols="1"
+            class="ep"
+            v-for="(episode, index) in Anime.episodes"
+            :key="episode.id"
+            v-on:click="
               {
-                getEpisode(episode.id);
+                {
+                  getEpisode(episode.id);
+                }
               }
-            }
-          "
-        >
-          <b>{{ index + 1 }}</b>
-        </b-col>
-      </b-row>
-      <hr />
-    </b-container>
+            "
+          >
+            <b>{{ index + 1 }}</b>
+          </b-col>
+        </b-row>
+        <hr />
+      </b-container>
+    </div>
+    <div v-else>
+      <div class="text-center container p-5">
+        <b-spinner
+          style="height: 50px; width: 50px"
+          label="Loading..."
+        ></b-spinner>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-const api = require("@dlwlrma00/animefreak2");
-
 export default {
   props: {
     AnimeName: String,
@@ -52,19 +60,21 @@ export default {
   data() {
     return {
       Anime: Object,
+      notLoading: false,
     };
   },
-  components:{
-  },
+  components: {},
   methods: {
     getAnimeData(AnimeName) {
-      api
-        .getSingleAnimeData(AnimeName)
-        .then((AnimeObject) => {
-          this.Anime = AnimeObject;
+      fetch(`${process.env.VUE_APP_ANIME_API}anime/${AnimeName}`, {
+        method: "get",
+      })
+        .then((response) => {
+          return response.json();
         })
-        .catch((err) => {
-          console.log(err);
+        .then((jsonData) => {
+          this.Anime = jsonData;
+          this.notLoading = true;
         });
     },
     getEpisode(id) {
