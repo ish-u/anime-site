@@ -2,13 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 
-
-// const cors = require('cors');
-// Vue.use(cors());
-
 Vue.config.productionTip = false
-
-
 
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 

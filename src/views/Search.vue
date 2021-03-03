@@ -36,7 +36,6 @@
 
 <script>
 import SearchBar from "../components/SearchBar";
-// const api = require("@dlwlrma00/animefreak2");
 
 export default {
   props: {

@@ -4,6 +4,7 @@
       <br />
       <h6 style="font-size: 10px">
         try reloading if the video doesn't start... (・_・;)
+        <button @click="re">reload</button>
       </h6>
       <br />
       <video :src="src" controls autoplay type="video/mp4"></video>
@@ -20,7 +21,6 @@
 </template>
 
 <script>
-const api = require("@dlwlrma00/animefreak2");
 export default {
   props: {
     id: String,
@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       src: String,
-      notLoading : false
+      notLoading: false,
     };
   },
   methods: {
@@ -40,23 +40,23 @@ export default {
           return response.json();
         })
         .then((jsonData) => {
-          console.log(jsonData);
           this.src = jsonData[0].mp4;
+          console.log(this.src);
           this.notLoading = true;
         });
-
-      api
-        .animeVideoHandler(id)
-        .then((episodeSource) => {
-          this.src = episodeSource[0].mp4;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
+    re(){
+        this.getEpisode(this.id);
+    }
   },
   mounted: function () {
     this.getEpisode(this.id);
+  },
+  watch: {
+    $route(to) {
+      this.id = to.params.id;
+      this.getEpisode(this.id);
+    },
   },
 };
 </script>
