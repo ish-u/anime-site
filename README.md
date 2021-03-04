@@ -1,24 +1,24 @@
-# anime
+# anime-site
 
-## Project setup
-```
-yarn install
-```
+## A VueJS App to watch Anime
 
-### Compiles and hot-reloads for development
+### Project setup
 ```
-yarn serve
+git clone https://github.com/ish-u/anime-site-api.git
+cd anime-site
+npm install
 ```
+### Set Up API from [anime-site-api](https://github.com/ish-u/anime-site-api) and save the ```.env``` as 
 
-### Compiles and minifies for production
 ```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
+VUE_APP_ANIME_API=http://localhost:3000/api/
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+#### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+
+###### _Just another Product of my Existential Crisis_
+
